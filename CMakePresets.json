@@ -1,0 +1,72 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 20,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "toolchain",
+            "hidden": true,
+            "environment": {
+                "VCPKG_ROOT": "${sourceDir}/lib/vcpkg"
+            },
+            "cacheVariables": {
+                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+            }
+        },
+        {
+            "name": "debug",
+            "displayName": "Debug",
+            "description": "Default debug configuration preset",
+            "generator": "Ninja",
+            "binaryDir": "build/debug",
+            "inherits": "toolchain",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "displayName": "Release",
+            "description": "Default release configuration preset",
+            "generator": "Ninja",
+            "binaryDir": "build/release",
+            "inherits": "toolchain",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "app-debug",
+            "displayName": "App Debug Build",
+            "configurePreset": "debug",
+            "configuration": "Debug"
+        },
+        {
+            "name": "app-release",
+            "displayName": "App Release Build",
+            "configurePreset": "release",
+            "configuration": "Release",
+            "targets": [
+                "App"
+            ]
+        }
+    ],
+    "testPresets": [
+        {
+            "name": "test-all",
+            "displayName": "Test All",
+            "configurePreset": "debug",
+            "output": {
+                "outputOnFailure": true
+            },
+            "execution": {
+                "stopOnFailure": true
+            }
+        }
+    ]
+}
