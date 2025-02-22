@@ -1,10 +1,12 @@
 #!/usr/bin/bash
 
-sudo apt-get update
-sudo apt install ninja-build
-sudo apt-get install curl zip unzip tar
-sudo apt-get install pkg-config
-sudo apt install clang-format
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+if [[ -f /etc/debian_version ]]; then
+  source "$SCRIPT_DIR/.debian/setup_workspace.sh"
+else
+  echo "Unsupported OS!"
+  exit 1
+fi
 
 git submodule update --init --recursive
 cmake --workflow --preset configure-build-test-debug
