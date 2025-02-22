@@ -1,0 +1,9 @@
+# Ignore external dependencies
+lib/*
+
+# Ignore generated files
+build/*
+
+# Ignore all files except .cpp and .hpp
+!*.cpp
+!*.hpp

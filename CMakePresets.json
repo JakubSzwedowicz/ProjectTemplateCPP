@@ -84,7 +84,7 @@
   ],
   "workflowPresets": [
     {
-      "name": "debug",
+      "name": "configure-build-test-debug",
       "steps": [
         {
           "type": "configure",
