@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.14)
+cmake_minimum_required(VERSION 3.10...3.31)
 
-project(HelloWorld)
+project(HelloWorld LANGUAGES CXX)
 
 enable_testing()
 

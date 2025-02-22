@@ -1,72 +1,104 @@
 {
-    "version": 6,
-    "cmakeMinimumRequired": {
-        "major": 3,
-        "minor": 20,
-        "patch": 0
+  "version": 6,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "toolchain",
+      "hidden": true,
+      "environment": {
+        "VCPKG_ROOT": "${sourceDir}/lib/vcpkg"
+      },
+      "cacheVariables": {
+        "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
+      }
     },
-    "configurePresets": [
+    {
+      "name": "debug",
+      "displayName": "Debug",
+      "description": "Default debug configuration preset",
+      "generator": "Ninja",
+      "binaryDir": "build/debug",
+      "inherits": "toolchain",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -g -O2"
+      }
+    },
+    {
+      "name": "release",
+      "displayName": "Release",
+      "description": "Default release configuration preset",
+      "generator": "Ninja",
+      "binaryDir": "build/release",
+      "inherits": "toolchain",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -O3"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "app-debug",
+      "displayName": "App Debug Build",
+      "configurePreset": "debug",
+      "configuration": "Debug",
+      "jobs": 8
+    },
+    {
+      "name": "app-release",
+      "displayName": "App Release Build",
+      "configurePreset": "release",
+      "configuration": "Release",
+      "jobs": 8,
+      "targets": [
+        "App"
+      ]
+    }
+  ],
+  "testPresets": [
+    {
+      "name": "test-all-debug",
+      "configurePreset": "debug",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "stopOnFailure": false
+      }
+    },
+    {
+      "name": "test-all-release",
+      "configurePreset": "release",
+      "output": {
+        "outputOnFailure": true
+      },
+      "execution": {
+        "stopOnFailure": false
+      }
+    }
+  ],
+  "workflowPresets": [
+    {
+      "name": "debug",
+      "steps": [
         {
-            "name": "toolchain",
-            "hidden": true,
-            "environment": {
-                "VCPKG_ROOT": "${sourceDir}/lib/vcpkg"
-            },
-            "cacheVariables": {
-                "CMAKE_TOOLCHAIN_FILE": "$env{VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake"
-            }
+          "type": "configure",
+          "name": "debug"
         },
         {
-            "name": "debug",
-            "displayName": "Debug",
-            "description": "Default debug configuration preset",
-            "generator": "Ninja",
-            "binaryDir": "build/debug",
-            "inherits": "toolchain",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
+          "type": "build",
+          "name": "app-debug"
         },
         {
-            "name": "release",
-            "displayName": "Release",
-            "description": "Default release configuration preset",
-            "generator": "Ninja",
-            "binaryDir": "build/release",
-            "inherits": "toolchain",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
+          "type": "test",
+          "name": "test-all-debug"
         }
-    ],
-    "buildPresets": [
-        {
-            "name": "app-debug",
-            "displayName": "App Debug Build",
-            "configurePreset": "debug",
-            "configuration": "Debug"
-        },
-        {
-            "name": "app-release",
-            "displayName": "App Release Build",
-            "configurePreset": "release",
-            "configuration": "Release",
-            "targets": [
-                "App"
-            ]
-        }
-    ],
-    "testPresets": [
-        {
-            "name": "test-all",
-            "displayName": "Test All",
-            "configurePreset": "debug",
-            "output": {
-                "outputOnFailure": true
-            },
-            "execution": {
-                "stopOnFailure": true
-            }
-        }
-    ]
+      ]
+    }
+  ]
 }
