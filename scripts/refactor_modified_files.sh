@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 if ! command -v clang-format &> /dev/null; then
   echo "Error: clang-format is not installed or not found in PATH."
