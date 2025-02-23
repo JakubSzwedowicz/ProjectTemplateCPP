@@ -36,3 +36,4 @@
 
 # Project artifacts
 build
+cmake-build-debug
