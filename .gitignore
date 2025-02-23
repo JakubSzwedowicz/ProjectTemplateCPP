@@ -33,6 +33,7 @@
 
 # IDEs
 .vscode
+*idea
 
 # Project artifacts
 build
