@@ -7,7 +7,7 @@
   },
   "configurePresets": [
     {
-      "name": "toolchain",
+      "name": "base-toolchain",
       "hidden": true,
       "environment": {
         "VCPKG_ROOT": "${sourceDir}/lib/vcpkg"
@@ -17,16 +17,30 @@
       }
     },
     {
+      "name": "debug-toolchain",
+      "hidden": true,
+      "inherits": "base-toolchain",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -Og -frecord-gcc-switches",
+        "CMAKE_BUILD_TYPE": "Debug"
+      }
+    },
+    {
+      "name": "release-toolchain",
+      "hidden": true,
+      "inherits": "base-toolchain",
+      "cacheVariables": {
+        "CMAKE_CXX_FLAGS": "-Wall -Wextra -g -O3 -frecord-gcc-switches",
+        "CMAKE_BUILD_TYPE": "Release"
+      }
+    },
+    {
       "name": "debug",
       "displayName": "Debug",
       "description": "Default debug configuration preset",
       "generator": "Ninja",
       "binaryDir": "build/debug",
-      "inherits": "toolchain",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_CXX_FLAGS": "-Wall -Wextra -g -O2"
-      }
+      "inherits": "debug-toolchain"
     },
     {
       "name": "release",
@@ -34,11 +48,7 @@
       "description": "Default release configuration preset",
       "generator": "Ninja",
       "binaryDir": "build/release",
-      "inherits": "toolchain",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release",
-        "CMAKE_CXX_FLAGS": "-Wall -Wextra -O3"
-      }
+      "inherits": "release-toolchain"
     }
   ],
   "buildPresets": [
@@ -47,7 +57,10 @@
       "displayName": "App Debug Build",
       "configurePreset": "debug",
       "configuration": "Debug",
-      "jobs": 8
+      "jobs": 8,
+      "targets": [
+        "App"
+      ]
     },
     {
       "name": "app-release",
@@ -84,7 +97,8 @@
   ],
   "workflowPresets": [
     {
-      "name": "configure-build-test-debug",
+      "name": "all-debug",
+      "description": "configure-build-test-debug",
       "steps": [
         {
           "type": "configure",
